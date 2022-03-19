@@ -1,0 +1,36 @@
+Задание
+
+
+В таблицу buy_book добавить заказ с номером 5. Этот заказ должен содержать книгу Пастернака «Лирика» в количестве двух экземпляров и книгу Булгакова «Белая гвардия» в одном экземпляре.
+
+Результат
+
+Affected rows: 1
+
+Affected rows: 1
+
+Query result (выборка из таблицы buy_book):
++-------------+--------+---------+--------+
+| buy_book_id | buy_id | book_id | amount |
++-------------+--------+---------+--------+
+| 1           | 1      | 1       | 1      |
+| 2           | 1      | 7       | 2      |
+| 3           | 1      | 4       | 1      |
+| 4           | 2      | 8       | 2      |
+| 5           | 3      | 3       | 2      |
+| 6           | 3      | 2       | 1      |
+| 7           | 3      | 1       | 1      |
+| 8           | 4      | 5       | 1      |
+| 9           | 5      | 8       | 2      |
+| 10          | 5      | 2       | 1      |
++-------------+--------+---------+--------+
+
+INSERT INTO buy_book (buy_id, book_id, amount)
+VALUES
+    (5, (SELECT book_id FROM 
+         book JOIN author USING(author_id) 
+         WHERE title='Лирика' AND name_author LIKE 'Пастернак%'), 2),
+    (5, (SELECT book_id 
+         FROM book JOIN author USING(author_id) 
+         WHERE title='Белая Гвардия' AND name_author LIKE 'Булгаков%'), 1);
+SELECT * FROM buy_book;
