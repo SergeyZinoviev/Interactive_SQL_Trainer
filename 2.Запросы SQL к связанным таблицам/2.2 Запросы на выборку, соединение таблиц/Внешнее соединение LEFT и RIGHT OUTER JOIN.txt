@@ -1,0 +1,16 @@
+Внешнее соединение LEFT и RIGHT OUTER JOIN
+
+Задание
+Вывести все жанры, которые не представлены в книгах на складе.
+
++-------------+
+| name_genre  |
++-------------+
+| Приключения |
++-------------+
+
+SELECT name_genre
+FROM genre LEFT JOIN book
+     ON genre.genre_id = book.genre_id
+WHERE book.genre_id IS NULL
+ORDER BY name_genre
