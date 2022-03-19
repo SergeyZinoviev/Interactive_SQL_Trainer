@@ -1,0 +1,38 @@
+Задание
+
+
+Для каждой отдельной книги необходимо вывести информацию о количестве проданных экземпляров и их стоимости за текущий и предыдущий год . Вычисляемые столбцы назвать Количество и Сумма. Информацию отсортировать по убыванию стоимости.
+
+Результат
++-----------------------+------------+---------+
+| title                 | Количество | Сумма   |
++-----------------------+------------+---------+
+| Братья Карамазовы     | 8          | 6247.20 |
+| Мастер и Маргарита    | 6          | 4024.38 |
+| Идиот                 | 5          | 2281.80 |
+| Белая гвардия         | 3          | 1581.10 |
+| Черный человек        | 2          | 1140.40 |
+| Лирика                | 2          | 1037.98 |
+| Игрок                 | 2          | 961.80  |
+| Стихотворения и поэмы | 1          | 650.00  |
++-----------------------+------------+---------+
+
+WITH Title_sales AS (
+SELECT title, buy_book.amount, price
+FROM book
+    INNER JOIN buy_book USING(book_id)
+    INNER JOIN buy USING(buy_id) 
+    INNER JOIN buy_step USING(buy_id)
+    INNER JOIN step USING(step_id)
+WHERE  date_step_end IS NOT Null and name_step = "Оплата"
+    
+UNION ALL
+    
+SELECT title, buy_archive.amount, buy_archive.price
+    FROM buy_archive
+    INNER JOIN book USING(book_id)
+)
+SELECT title, SUM(amount) AS Количество, SUM(amount*price) AS Сумма
+FROM Title_sales
+GROUP BY title
+ORDER BY Сумма DESC;
